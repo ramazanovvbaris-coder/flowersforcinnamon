@@ -9,6 +9,11 @@
     <title>flowers</title>
 </head>
 <body class="container">
+    <!-- Background Music -->
+    <audio id="bgMusic" autoplay loop muted>
+      <source src="cinnamon.mp3" type="audio/mpeg">
+    </audio>
+
     <div class="night"></div>
     <div class="flowers">
       <div class="flower flower--1">
@@ -308,5 +313,34 @@
     </div>
     
     <script src="main.js"></script>
+    <script>
+      // Səhifə yüklənən kimi musiqini avtomatik başlat
+      window.addEventListener('DOMContentLoaded', function() {
+        const music = document.getElementById('bgMusic');
+        
+        // Səsi açıq başlat
+        music.muted = false;
+        music.volume = 0.5; // Səs həcmi 50%
+        
+        // Dərhal başlatmağa cəhd et
+        const playPromise = music.play();
+        
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            // Əgər brauzer bloklaşdırsa, istifadəçi hər hansı düyməyə basanda başlat
+            const startMusic = () => {
+              music.play();
+              document.removeEventListener('keydown', startMusic);
+              document.removeEventListener('click', startMusic);
+              document.removeEventListener('touchstart', startMusic);
+            };
+            
+            document.addEventListener('keydown', startMusic);
+            document.addEventListener('click', startMusic);
+            document.addEventListener('touchstart', startMusic);
+          });
+        }
+      });
+    </script>
   </body>
 </html>
